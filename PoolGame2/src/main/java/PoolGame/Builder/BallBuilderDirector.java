@@ -9,6 +9,7 @@ import PoolGame.Items.Ball.BallType;
 import PoolGame.Strategy.GameReset;
 import PoolGame.Strategy.PocketOnce;
 import PoolGame.Strategy.PocketTwice;
+import PoolGame.Strategy.PocketThrice;
 
 /** The class that builds all the different balls */
 public class BallBuilderDirector {
@@ -33,6 +34,12 @@ public class BallBuilderDirector {
         this.register("white", new WhiteBallBuilder(BallType.CUEBALL, new GameReset()));
         this.register("red", new RedBallBuilder(BallType.NORMALBALL, new PocketOnce()));
         this.register("blue", new BlueBallBuilder(BallType.NORMALBALL, new PocketTwice()));
+        this.register("black", new BlackBallBuilder(BallType.NORMALBALL, new PocketThrice()));
+        this.register("yellow", new YellowBallBuilder(BallType.NORMALBALL, new PocketOnce()));
+        this.register("purple", new PurpleBallBuilder(BallType.NORMALBALL, new PocketTwice()));
+        this.register("orange", new OrangeBallBuilder(BallType.NORMALBALL, new PocketOnce()));
+        this.register("green", new GreenBallBuilder(BallType.NORMALBALL, new PocketTwice()));
+        this.register("brown", new BrownBallBuilder(BallType.NORMALBALL, new PocketThrice()));
     }
 
     /**
