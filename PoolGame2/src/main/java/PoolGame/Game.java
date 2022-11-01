@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PoolGame.Builder.BallBuilderDirector;
+import PoolGame.Builder.PocketBuilderDirector;
 import PoolGame.Config.BallConfig;
+import PoolGame.Config.PocketConfig;
 import PoolGame.Items.Ball;
+import PoolGame.Items.Pocket;
 import PoolGame.Items.PoolTable;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -29,9 +32,17 @@ public class Game {
     private void setup(ConfigReader config) {
         this.table = new PoolTable(config.getConfig().getTableConfig());
         List<BallConfig> ballsConf = config.getConfig().getBallsConfig().getBallConfigs();
+        System.out.println(ballsConf.size());
+        //List<PocketConfig> pocketsConf = config.getConfig().getPocketsConfig().getPocketConfig();
+        //System.out.println((pocketsConf.size()));
+
         List<Ball> balls = new ArrayList<>();
+        List<Pocket> pockets = new ArrayList<>();
         BallBuilderDirector builder = new BallBuilderDirector();
+        PocketBuilderDirector pbuilder = new PocketBuilderDirector();
+
         builder.registerDefault();
+
         for (BallConfig ballConf: ballsConf) {
             Ball ball = builder.construct(ballConf);
             if (ball == null) {
@@ -40,7 +51,17 @@ public class Game {
                 balls.add(ball);
             }
         }
+//        for (PocketConfig pocketConf : pocketsConf){
+//            Pocket pocket = pbuilder.construct(pocketConf);
+//            if (pocket == null) {
+//                System.err.println("WARNING: Unknown pocket, skipping...");
+//            } else {
+//                pockets.add(pocket);
+//            }
+//        }
+
         this.table.setupBalls(balls);
+        this.table.setupPockets(pockets);
         this.winText.setVisible(false);
         this.winText.setX(table.getDimX() / 2);
         this.winText.setY(table.getDimY() / 2);

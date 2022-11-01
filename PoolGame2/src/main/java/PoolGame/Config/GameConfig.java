@@ -6,16 +6,25 @@ import org.json.simple.JSONObject;
 public class GameConfig implements Configurable {
     private TableConfig table;
     private BallsConfig balls;
+    private PocketsConfig pockets;
 
     /**
      * Initialise the game config with the provided value
      * @param table An instance of the table config
      * @param balls An instance of the balls config containing all the balls
      */
+    public GameConfig(TableConfig table, BallsConfig balls, PocketsConfig pockets) {
+        this.init(table, balls, pockets);
+    }
     public GameConfig(TableConfig table, BallsConfig balls) {
         this.init(table, balls);
     }
     
+    private void init(TableConfig table, BallsConfig balls, PocketsConfig pockets) {
+        this.table = table;
+        this.balls = balls;
+        this.pockets = pockets;
+    }
     private void init(TableConfig table, BallsConfig balls) {
         this.table = table;
         this.balls = balls;
@@ -23,9 +32,11 @@ public class GameConfig implements Configurable {
 
     public Configurable parseJSON(Object obj) {
         JSONObject json = (JSONObject) obj;
+        JSONObject jsonTable = (JSONObject) json.get("Table");
         this.table = new TableConfig(json.get("Table"));
         this.balls = new BallsConfig(json.get("Balls"));
-        this.init(table, balls);
+        this.pockets = new PocketsConfig(json.get("Table"));
+        this.init(table, balls, pockets);
         return this;
     }
 
@@ -43,5 +54,13 @@ public class GameConfig implements Configurable {
      */
     public BallsConfig getBallsConfig() {
         return this.balls;
+    }
+
+    /**
+     * Get the pockets config instance as defined in the config
+     * @return The pockets config instance
+     */
+    public PocketsConfig getPocketsConfig(){
+        return this.pockets;
     }
 }

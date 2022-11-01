@@ -32,8 +32,8 @@ public class App extends Application {
 		if (args.size() > 0) {
 			configPath = args.get(0);
 		} else {
-			// configPath = "src/main/resources/config.json";
-			configPath = "/config.json";
+			//configPath = "src/main/resources/config.json";
+			configPath = "/config_easy.json";
             isResourcesDir = true;
 		}
 		// parse the file:

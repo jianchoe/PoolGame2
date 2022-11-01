@@ -1,10 +1,11 @@
 package PoolGame.Builder;
 
+import PoolGame.Items.Pocket;
 public interface PocketBuilder {
 
     public void reset();
-    public void setxPos();
-    public void setyPos();
-    public void setRadius();
-    public void build();
+    public void setxPos(double xPos);
+    public void setyPos(double yPos);
+    public void setRadius(double radius);
+    public Pocket build();
 }

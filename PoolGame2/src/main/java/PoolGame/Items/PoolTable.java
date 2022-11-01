@@ -60,12 +60,13 @@ public class PoolTable implements Drawable {
         this.shape = new Rectangle(this.dim[0], this.dim[1], this.colour);
         this.balls = new LinkedList<>();
         this.pockets = new ArrayList<>();
-        this.pockets.add(new Pocket(POCKET_OFFSET, POCKET_OFFSET));
-        this.pockets.add(new Pocket(dimX / 2, POCKET_OFFSET));
-        this.pockets.add(new Pocket(dimX - POCKET_OFFSET, POCKET_OFFSET));
-        this.pockets.add(new Pocket(POCKET_OFFSET, dimY - POCKET_OFFSET));
-        this.pockets.add(new Pocket(dimX / 2, dimY - POCKET_OFFSET));
-        this.pockets.add(new Pocket(dimX - POCKET_OFFSET, dimY - POCKET_OFFSET));
+//        this.pockets = new ArrayList<>();
+//        this.pockets.add(new Pocket(POCKET_OFFSET, POCKET_OFFSET));
+//        this.pockets.add(new Pocket(dimX / 2, POCKET_OFFSET));
+//        this.pockets.add(new Pocket(dimX - POCKET_OFFSET, POCKET_OFFSET));
+//        this.pockets.add(new Pocket(POCKET_OFFSET, dimY - POCKET_OFFSET));
+//        this.pockets.add(new Pocket(dimX / 2, dimY - POCKET_OFFSET));
+//        this.pockets.add(new Pocket(dimX - POCKET_OFFSET, dimY - POCKET_OFFSET));
     }
 
     /**
@@ -132,6 +133,18 @@ public class PoolTable implements Drawable {
             //     this.setCueBall(ball);
             // }
             this.addBall(ball);
+        }
+    }
+
+    /**
+     * Set up table with the list of pockets.
+     * @param pockets The list of balls to be added to the table
+     */
+    public void setupPockets(List<Pocket> pockets){
+        for (Pocket pocket : pockets){
+            if(!this.pockets.contains(pocket)){
+                this.pockets.add(pocket);
+            }
         }
     }
 

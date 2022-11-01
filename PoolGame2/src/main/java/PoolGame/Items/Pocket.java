@@ -16,6 +16,9 @@ public class Pocket implements Drawable {
     protected Color colour = Color.BLACK;
     /** The JavaFX shape of the pocket */
     protected Circle shape;
+    private double posX;
+    private double posY;
+    private double radius;
 
     /**
      * Initialise the pool table pocket with the provided value
@@ -24,6 +27,15 @@ public class Pocket implements Drawable {
      */
     public Pocket(double posX, double posY) {
         this.shape = new Circle(posX, posY, Pocket.RADIUS, this.colour);
+    }
+
+    public Pocket(double posX, double posY, double radius){
+        this.posX = posX;
+        this.posY = posY;
+        this.radius = radius;
+    }
+    public Pocket(){
+
     }
 
     /**
@@ -41,5 +53,15 @@ public class Pocket implements Drawable {
 
     public void addToGroup(ObservableList<Node> groupChildren) {
         groupChildren.add(this.shape);
+    }
+
+    public void setxPos(double posX){
+        this.posX = posX;
+    }
+    public void setyPos(double posY){
+        this.posY = posY;
+    }
+    public void setRadius(double radius){
+        this.radius = radius;
     }
 }

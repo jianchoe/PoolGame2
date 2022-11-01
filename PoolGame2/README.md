@@ -29,3 +29,6 @@ New/Editied Files:
 - PocketBuilderDirector
 - PocketsConfig
 - PocketConfig
+- PocketBuilderGeneral
+- ConfigReader
+- GameConfig
