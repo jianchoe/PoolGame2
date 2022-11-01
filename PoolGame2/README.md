@@ -19,3 +19,13 @@ with the pocket's rectangular bound.
 `gradle run --args="'insert_config_file_path'"` to load custom config.
 
 * Generate documentation:`gradle javadoc`
+
+New/Editied Files:
+- BallBuilders for extra colours
+  - black, brown, green, orange, purple, yellow
+- BallBuilderDirector
+  - Added extra balls into the register
+- PocketBuilder
+- PocketBuilderDirector
+- PocketsConfig
+- PocketConfig
