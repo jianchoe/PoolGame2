@@ -31,7 +31,7 @@ public class PocketConfig implements Configurable{
         JSONObject jsonTable = (JSONObject) json.get("Table");
         JSONArray jsonPockets = (JSONArray) jsonTable.get("pockets");
 
-        PositionConfig posConf = new PositionConfig(json.get("position"));
+        PositionConfig posConf = new PositionConfig(jsonPockets);
         double radius = (double) json.get("radius");
         this.init(posConf, radius);
         return null;

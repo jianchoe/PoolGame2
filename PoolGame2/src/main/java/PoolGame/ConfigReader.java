@@ -76,7 +76,7 @@ public class ConfigReader {
 		checkRequiredKey(jsonConfig, requiredKeys);
 		TableConfig table = (TableConfig)registry.create(requiredKeys[0], jsonConfig.get(requiredKeys[0]));
 		BallsConfig balls = (BallsConfig)registry.create(requiredKeys[1], jsonConfig.get(requiredKeys[1]));
-		//PocketsConfig pockets = (PocketsConfig)registry.create(requiredKeys[2], jsonConfig.get(requiredKeys[2])) ;
+		//PocketsConfig pockets = (PocketsConfig)registry.create(requiredKeys[2], jsonConfig.get(requiredKeys[2]));
 		this.config = new GameConfig(table, balls);
 	}
 

@@ -32,7 +32,6 @@ public class Game {
     private void setup(ConfigReader config) {
         this.table = new PoolTable(config.getConfig().getTableConfig());
         List<BallConfig> ballsConf = config.getConfig().getBallsConfig().getBallConfigs();
-        System.out.println(ballsConf.size());
         //List<PocketConfig> pocketsConf = config.getConfig().getPocketsConfig().getPocketConfig();
         //System.out.println((pocketsConf.size()));
 

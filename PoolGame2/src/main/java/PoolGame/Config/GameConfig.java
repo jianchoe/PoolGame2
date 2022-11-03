@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 public class GameConfig implements Configurable {
     private TableConfig table;
     private BallsConfig balls;
-    private PocketsConfig pockets;
+    public PocketsConfig pockets;
 
     /**
      * Initialise the game config with the provided value
@@ -35,7 +35,8 @@ public class GameConfig implements Configurable {
         JSONObject jsonTable = (JSONObject) json.get("Table");
         this.table = new TableConfig(json.get("Table"));
         this.balls = new BallsConfig(json.get("Balls"));
-        this.pockets = new PocketsConfig(json.get("Table"));
+        System.out.println(jsonTable.get("pockets"));
+        this.pockets = new PocketsConfig(jsonTable.get("pockets"));
         this.init(table, balls, pockets);
         return this;
     }
