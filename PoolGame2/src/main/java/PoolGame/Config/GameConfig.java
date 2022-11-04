@@ -16,11 +16,18 @@ public class GameConfig implements Configurable {
     public GameConfig(TableConfig table, BallsConfig balls, PocketsConfig pockets) {
         this.init(table, balls, pockets);
     }
-    
+    public GameConfig(TableConfig table, BallsConfig balls) {
+        this.init(table, balls);
+    }
     private void init(TableConfig table, BallsConfig balls, PocketsConfig pockets) {
         this.table = table;
         this.balls = balls;
         this.pockets = pockets;
+    }
+
+    private void init(TableConfig table, BallsConfig balls) {
+        this.table = table;
+        this.balls = balls;
     }
 
     public Configurable parseJSON(Object obj) {

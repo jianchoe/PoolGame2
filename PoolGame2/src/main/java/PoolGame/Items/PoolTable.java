@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -22,6 +23,7 @@ public class PoolTable implements Drawable {
     private Rectangle shape;
     private List<Ball> balls;
     private List<Pocket> pockets;
+    private boolean flag;
 
     /**
      * Offset of pockets on the table.
@@ -43,7 +45,8 @@ public class PoolTable implements Drawable {
      * Build the pool table using a `TableConfig` instance
      * @param config The `TableConfig` instance
      */
-    public PoolTable(TableConfig config) {
+    public PoolTable(TableConfig config, boolean flag) {
+        this.flag = flag;
         this.init(config.getColour(),
             config.getFriction(),
             config.getSizeConfig().getX(),
@@ -60,13 +63,16 @@ public class PoolTable implements Drawable {
         this.shape = new Rectangle(this.dim[0], this.dim[1], this.colour);
         this.balls = new LinkedList<>();
         this.pockets = new ArrayList<>();
-//        this.pockets = new ArrayList<>();
-//        this.pockets.add(new Pocket(POCKET_OFFSET, POCKET_OFFSET));
-//        this.pockets.add(new Pocket(dimX / 2, POCKET_OFFSET));
-//        this.pockets.add(new Pocket(dimX - POCKET_OFFSET, POCKET_OFFSET));
-//        this.pockets.add(new Pocket(POCKET_OFFSET, dimY - POCKET_OFFSET));
-//        this.pockets.add(new Pocket(dimX / 2, dimY - POCKET_OFFSET));
-//        this.pockets.add(new Pocket(dimX - POCKET_OFFSET, dimY - POCKET_OFFSET));
+
+        if (this.flag == true){
+            this.pockets = new ArrayList<>();
+            this.pockets.add(new Pocket(POCKET_OFFSET, POCKET_OFFSET));
+            this.pockets.add(new Pocket(dimX / 2, POCKET_OFFSET));
+            this.pockets.add(new Pocket(dimX - POCKET_OFFSET, POCKET_OFFSET));
+            this.pockets.add(new Pocket(POCKET_OFFSET, dimY - POCKET_OFFSET));
+            this.pockets.add(new Pocket(dimX / 2, dimY - POCKET_OFFSET));
+            this.pockets.add(new Pocket(dimX - POCKET_OFFSET, dimY - POCKET_OFFSET));
+        }
     }
 
     /**
@@ -156,7 +162,12 @@ public class PoolTable implements Drawable {
     public void addToGroup(ObservableList<Node> groupChildren) {
         groupChildren.add(this.shape);
         for (Pocket pocket : this.pockets) {
-            pocket.addToGroup(groupChildren);
+            if (flag == true){
+                pocket.addToGroup(groupChildren, true);
+            }
+            else {
+                pocket.addToGroup(groupChildren, false);
+            }
         }
         for (Ball ball : this.balls) {
             ball.addToGroup(groupChildren);
@@ -259,4 +270,5 @@ public class PoolTable implements Drawable {
             ball.reset();
         }
     }
+
 }

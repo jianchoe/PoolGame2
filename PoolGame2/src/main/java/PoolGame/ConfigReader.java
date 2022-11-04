@@ -22,6 +22,7 @@ public class ConfigReader {
 	private String path;
 	private boolean isResourcesDir;
 	private GameConfig config;
+	private boolean isOriginalJSON;
 	
     /**
 	 * Initialise the config reader with the provided value
@@ -35,9 +36,10 @@ public class ConfigReader {
 	 * @throws ConfigKeyMissingException A required JSON key is missing from the configuration
 	 * @throws IllegalArgumentException A value defined in the JSON configuration is invalid
 	 */
-	public ConfigReader(String path, boolean isResourcesDir) throws FileNotFoundException, IOException, ParseException, ConfigKeyMissingException, IllegalArgumentException {
+	public ConfigReader(String path, boolean isResourcesDir, boolean isOriginalJSON) throws FileNotFoundException, IOException, ParseException, ConfigKeyMissingException, IllegalArgumentException {
 		this.path = path;
 		this.isResourcesDir = isResourcesDir;
+		this.isOriginalJSON = isOriginalJSON;
 		this.config = null;
 		this.parse();
 	}
@@ -72,18 +74,29 @@ public class ConfigReader {
 		JSONObject jsonConfig = this.readFile();
 		ConfigFactoryRegistry registry = new ConfigFactoryRegistry();
 		registry.registerDefault();
-		
-		String requiredKeys[] = {"Table", "Balls"};
-		checkRequiredKey(jsonConfig, requiredKeys);
-		TableConfig table = (TableConfig)registry.create(requiredKeys[0], jsonConfig.get(requiredKeys[0]));
-		System.out.println(table);
-		BallsConfig balls = (BallsConfig)registry.create(requiredKeys[1], jsonConfig.get(requiredKeys[1]));
-		System.out.println(balls);
 
-		JSONObject jsonTable = (JSONObject) jsonConfig.get("Table");
-		PocketsConfig pockets = (PocketsConfig)registry.create("pockets", jsonTable);
-		System.out.println(pockets);
-		this.config = new GameConfig(table, balls, pockets);
+		if (isOriginalJSON == true){
+			String requiredKeys[] = {"Table", "Balls"};
+			checkRequiredKey(jsonConfig, requiredKeys);
+			TableConfig table = (TableConfig)registry.create(requiredKeys[0], jsonConfig.get(requiredKeys[0]));
+			BallsConfig balls = (BallsConfig)registry.create(requiredKeys[1], jsonConfig.get(requiredKeys[1]));
+			this.config = new GameConfig(table, balls);
+		}
+		else{
+			String requiredKeys[] = {"Table", "Balls"};
+			checkRequiredKey(jsonConfig, requiredKeys);
+			TableConfig table = (TableConfig)registry.create(requiredKeys[0], jsonConfig.get(requiredKeys[0]));
+			BallsConfig balls = (BallsConfig)registry.create(requiredKeys[1], jsonConfig.get(requiredKeys[1]));
+			JSONObject jsonTable = (JSONObject) jsonConfig.get("Table");
+			PocketsConfig pockets = (PocketsConfig)registry.create("pockets", jsonTable);
+			this.config = new GameConfig(table, balls, pockets);
+		}
+	}
+	public boolean getIsOriginalJSON(){
+		return this.isOriginalJSON;
+	}
+	public void changeOriginalJSON(boolean val){
+		this.isOriginalJSON = val;
 	}
 
 	private void checkRequiredKey(JSONObject jsonObj, String[] keys) throws ConfigKeyMissingException {

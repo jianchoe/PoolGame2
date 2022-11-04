@@ -9,6 +9,9 @@ import java.util.List;
 
 import PoolGame.Items.Pocket;
 import PoolGame.Items.PoolTable;
+import PoolGame.State.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import org.json.simple.parser.ParseException;
 
 import PoolGame.ConfigReader.ConfigKeyMissingException;
@@ -25,6 +28,9 @@ import javafx.util.Duration;
 public class App extends Application {
 
     private final double FRAMETIME = 1.0 / 60.0;
+    private String path = "/config.json";
+    private Scene scene;
+    private boolean flag;
 
     private ConfigReader loadConfig(List<String> args) {
         String configPath;
@@ -33,13 +39,21 @@ public class App extends Application {
 			configPath = args.get(0);
 		} else {
 			//configPath = "src/main/resources/config.json";
-			configPath = "/config_hard.json";
+			configPath = path;
             isResourcesDir = true;
 		}
 		// parse the file:
         ConfigReader config = null;
         try {
-            config = new ConfigReader(configPath, isResourcesDir);
+            if (path.toLowerCase().startsWith("/config_")) {
+                flag = false;
+            }
+            else if (path.toLowerCase().startsWith("/config.")){
+                flag = true;
+            }
+
+            config = new ConfigReader(configPath, isResourcesDir, flag);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.err.printf("ERROR: %s\n", e.getMessage());
@@ -67,7 +81,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         Group root = new Group();
-        Scene scene = new Scene(root);
+        scene = new Scene(root);
         
         stage.setScene(scene);
         stage.setTitle("PoolGame");
@@ -75,6 +89,8 @@ public class App extends Application {
         
         ConfigReader config = loadConfig(getParameters().getRaw());
         Game game = new Game(config);
+
+        this.setKeyEvents(scene);
         
         Canvas canvas = new Canvas(game.getWindowDimX(), game.getWindowDimY());
 
@@ -98,6 +114,39 @@ public class App extends Application {
         timeline.getKeyFrames().add(frame);
         timeline.play();
     }
+
+    public void setKeyEvents(Scene scene){
+
+        DifficultyChanger changer = new DifficultyChanger();
+
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()){
+                case Q:
+                    System.out.println("Q pressed");
+                    DifficultyState easy = new EasyState();
+                    changer.setState(easy);
+                    path = changer.getState();
+                    System.out.println(path);
+                    break;
+                case W:
+                    System.out.println("W pressed");
+                    DifficultyState normal = new NormalState();
+                    changer.setState(normal);
+                    path = changer.getState();
+                    System.out.println(path);
+                    break;
+                case E:
+                    System.out.println("E pressed");
+                    DifficultyState hard = new HardState();
+                    changer.setState(hard);
+                    path = changer.getState();
+                    System.out.println(path);
+                    break;
+            }
+        });
+    }
+
+
 
     /**
      * The entry point of the program

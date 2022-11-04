@@ -19,6 +19,7 @@ public class Pocket implements Drawable {
     private double posX;
     private double posY;
     private double radius;
+    private boolean flag;
 
     /**
      * Initialise the pool table pocket with the provided value
@@ -52,7 +53,13 @@ public class Pocket implements Drawable {
     }
 
     public void addToGroup(ObservableList<Node> groupChildren) {
-        this.shape = new Circle(this.posX, this.posY, this.radius, this.colour);
+        groupChildren.add(this.shape);
+    }
+
+    public void addToGroup(ObservableList<Node> groupChildren, boolean flag) {
+        if (flag == false){
+            this.shape = new Circle(this.posX, this.posY, this.radius, this.colour);
+        }
         groupChildren.add(this.shape);
     }
 

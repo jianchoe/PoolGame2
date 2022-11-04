@@ -13,6 +13,7 @@ import PoolGame.Items.PoolTable;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 
 /** The game class that runs the game */
@@ -30,15 +31,30 @@ public class Game {
     }
 
     private void setup(ConfigReader config) {
-        this.table = new PoolTable(config.getConfig().getTableConfig());
         List<BallConfig> ballsConf = config.getConfig().getBallsConfig().getBallConfigs();
-        List<PocketConfig> pocketsConf = config.getConfig().getPocketsConfig().getPocketConfigs();
+
+        if (config.getIsOriginalJSON() == false){
+            this.table = new PoolTable(config.getConfig().getTableConfig(), false);
+            List<PocketConfig> pocketsConf = config.getConfig().getPocketsConfig().getPocketConfigs();
+            List<Pocket> pockets = new ArrayList<>();
+            PocketBuilderDirector pbuilder = new PocketBuilderDirector();
+            for (PocketConfig pocketConf : pocketsConf){
+                Pocket pocket = pbuilder.construct(pocketConf);
+                if (pocket == null) {
+                    System.err.println("WARNING: Unknown pocket, skipping...");
+                } else {
+                    pockets.add(pocket);
+                }
+            }
+            this.table.setupPockets(pockets);
+        }
+
+        if (config.getIsOriginalJSON() == true){
+            this.table = new PoolTable(config.getConfig().getTableConfig(), true);
+        }
 
         List<Ball> balls = new ArrayList<>();
-        List<Pocket> pockets = new ArrayList<>();
         BallBuilderDirector builder = new BallBuilderDirector();
-        PocketBuilderDirector pbuilder = new PocketBuilderDirector();
-
         builder.registerDefault();
 
         for (BallConfig ballConf: ballsConf) {
@@ -49,18 +65,8 @@ public class Game {
                 balls.add(ball);
             }
         }
-        for (PocketConfig pocketConf : pocketsConf){
-            Pocket pocket = pbuilder.construct(pocketConf);
-            if (pocket == null) {
-                System.err.println("WARNING: Unknown pocket, skipping...");
-            } else {
-                pockets.add(pocket);
-                System.out.println("added");
-            }
-        }
 
         this.table.setupBalls(balls);
-        this.table.setupPockets(pockets);
         this.winText.setVisible(false);
         this.winText.setX(table.getDimX() / 2);
         this.winText.setY(table.getDimY() / 2);
