@@ -16,18 +16,11 @@ public class GameConfig implements Configurable {
     public GameConfig(TableConfig table, BallsConfig balls, PocketsConfig pockets) {
         this.init(table, balls, pockets);
     }
-    public GameConfig(TableConfig table, BallsConfig balls) {
-        this.init(table, balls);
-    }
     
     private void init(TableConfig table, BallsConfig balls, PocketsConfig pockets) {
         this.table = table;
         this.balls = balls;
         this.pockets = pockets;
-    }
-    private void init(TableConfig table, BallsConfig balls) {
-        this.table = table;
-        this.balls = balls;
     }
 
     public Configurable parseJSON(Object obj) {
@@ -35,7 +28,6 @@ public class GameConfig implements Configurable {
         JSONObject jsonTable = (JSONObject) json.get("Table");
         this.table = new TableConfig(json.get("Table"));
         this.balls = new BallsConfig(json.get("Balls"));
-        System.out.println(jsonTable.get("pockets"));
         this.pockets = new PocketsConfig(jsonTable.get("pockets"));
         this.init(table, balls, pockets);
         return this;

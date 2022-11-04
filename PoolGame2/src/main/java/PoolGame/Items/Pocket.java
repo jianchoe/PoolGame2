@@ -52,6 +52,7 @@ public class Pocket implements Drawable {
     }
 
     public void addToGroup(ObservableList<Node> groupChildren) {
+        this.shape = new Circle(this.posX, this.posY, this.radius, this.colour);
         groupChildren.add(this.shape);
     }
 

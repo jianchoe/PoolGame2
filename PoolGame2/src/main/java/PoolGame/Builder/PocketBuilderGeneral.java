@@ -6,6 +6,9 @@ public class PocketBuilderGeneral implements  PocketBuilder{
 
     private Pocket pocket;
 
+    public PocketBuilderGeneral(){
+        this.reset();
+    }
     public void reset(){
         pocket = new Pocket();
     };

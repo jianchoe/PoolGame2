@@ -16,15 +16,15 @@ public class PocketsConfig implements Configurable{
     }
     public Configurable parseJSON(Object obj){
         List<PocketConfig> list = new ArrayList<>();
-        JSONArray json = (JSONArray) obj;
+        JSONArray jsonPockets = (JSONArray) obj;
 
-        for(Object p : json){
-            list.add(new PocketConfig(p));
+        for(Object pocket : jsonPockets){
+            list.add(new PocketConfig(pocket));
         }
         this.init(list);
         return this;
     }
-    public List<PocketConfig> getPocketConfig(){
+    public List<PocketConfig> getPocketConfigs(){
         return this.pocket;
     }
 

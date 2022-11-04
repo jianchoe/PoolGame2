@@ -15,6 +15,7 @@ public class ConfigFactoryRegistry {
     public void registerDefault() {
         this.register("Table", new TableConfigFactory());
         this.register("Balls", new BallsConfigFactory());
+        this.register("pockets", new PocketsConfigFactory());
     }
 
     /**

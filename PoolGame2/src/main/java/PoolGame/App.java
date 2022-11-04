@@ -33,7 +33,7 @@ public class App extends Application {
 			configPath = args.get(0);
 		} else {
 			//configPath = "src/main/resources/config.json";
-			configPath = "/config.json";
+			configPath = "/config_hard.json";
             isResourcesDir = true;
 		}
 		// parse the file:

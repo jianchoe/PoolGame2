@@ -32,8 +32,7 @@ public class Game {
     private void setup(ConfigReader config) {
         this.table = new PoolTable(config.getConfig().getTableConfig());
         List<BallConfig> ballsConf = config.getConfig().getBallsConfig().getBallConfigs();
-        //List<PocketConfig> pocketsConf = config.getConfig().getPocketsConfig().getPocketConfig();
-        //System.out.println((pocketsConf.size()));
+        List<PocketConfig> pocketsConf = config.getConfig().getPocketsConfig().getPocketConfigs();
 
         List<Ball> balls = new ArrayList<>();
         List<Pocket> pockets = new ArrayList<>();
@@ -50,14 +49,15 @@ public class Game {
                 balls.add(ball);
             }
         }
-//        for (PocketConfig pocketConf : pocketsConf){
-//            Pocket pocket = pbuilder.construct(pocketConf);
-//            if (pocket == null) {
-//                System.err.println("WARNING: Unknown pocket, skipping...");
-//            } else {
-//                pockets.add(pocket);
-//            }
-//        }
+        for (PocketConfig pocketConf : pocketsConf){
+            Pocket pocket = pbuilder.construct(pocketConf);
+            if (pocket == null) {
+                System.err.println("WARNING: Unknown pocket, skipping...");
+            } else {
+                pockets.add(pocket);
+                System.out.println("added");
+            }
+        }
 
         this.table.setupBalls(balls);
         this.table.setupPockets(pockets);

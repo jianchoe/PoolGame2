@@ -25,15 +25,15 @@ public class PocketConfig implements Configurable{
     }
 
     public Configurable parseJSON(Object obj){
-        //List<PositionConfig> pockets = new ArrayList<>();
+        List<PositionConfig> pockets = new ArrayList<>();
+        List<Double> radiusList = new ArrayList<>();
 
-        JSONObject json = (JSONObject) obj;
-        JSONObject jsonTable = (JSONObject) json.get("Table");
-        JSONArray jsonPockets = (JSONArray) jsonTable.get("pockets");
+        JSONObject jsonPocket = (JSONObject) obj;
+        PositionConfig posConf = new PositionConfig(jsonPocket.get("position"));
+        double radius = (double) jsonPocket.get("radius");
 
-        PositionConfig posConf = new PositionConfig(jsonPockets);
-        double radius = (double) json.get("radius");
         this.init(posConf, radius);
+
         return null;
     }
 
@@ -43,4 +43,5 @@ public class PocketConfig implements Configurable{
     public double getRadius(){
         return this.radius;
     }
+
 }

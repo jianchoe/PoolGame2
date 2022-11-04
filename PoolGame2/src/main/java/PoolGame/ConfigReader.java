@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import PoolGame.Config.PocketsConfig;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -75,9 +76,14 @@ public class ConfigReader {
 		String requiredKeys[] = {"Table", "Balls"};
 		checkRequiredKey(jsonConfig, requiredKeys);
 		TableConfig table = (TableConfig)registry.create(requiredKeys[0], jsonConfig.get(requiredKeys[0]));
+		System.out.println(table);
 		BallsConfig balls = (BallsConfig)registry.create(requiredKeys[1], jsonConfig.get(requiredKeys[1]));
-		//PocketsConfig pockets = (PocketsConfig)registry.create(requiredKeys[2], jsonConfig.get(requiredKeys[2]));
-		this.config = new GameConfig(table, balls);
+		System.out.println(balls);
+
+		JSONObject jsonTable = (JSONObject) jsonConfig.get("Table");
+		PocketsConfig pockets = (PocketsConfig)registry.create("pockets", jsonTable);
+		System.out.println(pockets);
+		this.config = new GameConfig(table, balls, pockets);
 	}
 
 	private void checkRequiredKey(JSONObject jsonObj, String[] keys) throws ConfigKeyMissingException {
