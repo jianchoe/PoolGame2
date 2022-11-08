@@ -63,6 +63,10 @@ public class Pocket implements Drawable {
         groupChildren.add(this.shape);
     }
 
+    public void removeFromGroup(ObservableList<Node> groupChildren){
+        groupChildren.remove(this.shape);
+    }
+
     public void setxPos(double posX){
         this.posX = posX;
     }

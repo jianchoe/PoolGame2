@@ -29,7 +29,7 @@ public class App extends Application {
 
     private final double FRAMETIME = 1.0 / 60.0;
     private String path = "/config.json";
-    private Scene scene;
+    private Canvas canvas;
     private boolean flag;
 
     private ConfigReader loadConfig(List<String> args) {
@@ -81,7 +81,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         Group root = new Group();
-        scene = new Scene(root);
+        Scene scene = new Scene(root);
         
         stage.setScene(scene);
         stage.setTitle("PoolGame");
@@ -90,9 +90,9 @@ public class App extends Application {
         ConfigReader config = loadConfig(getParameters().getRaw());
         Game game = new Game(config);
 
-        this.setKeyEvents(scene);
-        
-        Canvas canvas = new Canvas(game.getWindowDimX(), game.getWindowDimY());
+        canvas = new Canvas(game.getWindowDimX(), game.getWindowDimY());
+
+        this.setKeyEvents(root, scene, game);
 
         stage.setWidth(game.getWindowDimX());
         stage.setHeight(game.getWindowDimY() +
@@ -115,38 +115,51 @@ public class App extends Application {
         timeline.play();
     }
 
-    public void setKeyEvents(Scene scene){
-
-        DifficultyChanger changer = new DifficultyChanger();
-
+    public void setKeyEvents(Group root, Scene scene, Game game){
         scene.setOnKeyPressed(event -> {
+            ConfigReader newConf;
+
             switch (event.getCode()){
                 case Q:
                     System.out.println("Q pressed");
                     DifficultyState easy = new EasyState();
-                    changer.setState(easy);
-                    path = changer.getState();
-                    System.out.println(path);
+                    this.reset(root, game, easy);
+                    System.out.println("Difficulty: Easy");
                     break;
                 case W:
                     System.out.println("W pressed");
                     DifficultyState normal = new NormalState();
-                    changer.setState(normal);
-                    path = changer.getState();
-                    System.out.println(path);
+                    this.reset(root, game, normal);
+                    System.out.println("Difficulty: Normal");
                     break;
                 case E:
                     System.out.println("E pressed");
                     DifficultyState hard = new HardState();
-                    changer.setState(hard);
-                    path = changer.getState();
-                    System.out.println(path);
+                    this.reset(root, game, hard);
+                    System.out.println("Difficulty: Hard");
+                    break;
+                case A:
+                    System.out.println("A pressed");
+                    DifficultyState original = new OriginalState();
+                    this.reset(root, game, original);
+                    System.out.println("Original Level");
                     break;
             }
         });
     }
 
-
+    public Canvas reset(Group root, Game game, DifficultyState state){
+        DifficultyChanger changer = new DifficultyChanger();
+        changer.setState(state);
+        path = changer.getState();
+        root.getChildren().remove(canvas);
+        game.removeDrawables(root);
+        ConfigReader newConf = loadConfig(getParameters().getRaw());
+        game.reload(newConf);
+        canvas = new Canvas(game.getWindowDimX(), game.getWindowDimY());
+        game.addDrawables(root);
+        return canvas;
+    }
 
     /**
      * The entry point of the program

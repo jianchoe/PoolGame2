@@ -15,4 +15,5 @@ public interface Drawable {
      * @param groupChildren The list of `Node` obtained from the JavaFX Group.
      */
     public void addToGroup(ObservableList<Node> groupChildren);
+    public void removeFromGroup(ObservableList<Node> groupChildren);
 }

@@ -72,6 +72,48 @@ public class Game {
         this.winText.setY(table.getDimY() / 2);
     }
 
+    public void reload(ConfigReader config) {
+        List<BallConfig> ballsConf = config.getConfig().getBallsConfig().getBallConfigs();
+
+        if (config.getIsOriginalJSON() == false){
+            this.table = new PoolTable(config.getConfig().getTableConfig(), false);
+            List<PocketConfig> pocketsConf = config.getConfig().getPocketsConfig().getPocketConfigs();
+            List<Pocket> pockets = new ArrayList<>();
+            PocketBuilderDirector pbuilder = new PocketBuilderDirector();
+            for (PocketConfig pocketConf : pocketsConf){
+                Pocket pocket = pbuilder.construct(pocketConf);
+                if (pocket == null) {
+                    System.err.println("WARNING: Unknown pocket, skipping...");
+                } else {
+                    pockets.add(pocket);
+                }
+            }
+            this.table.setupPockets(pockets);
+        }
+
+        if (config.getIsOriginalJSON() == true){
+            this.table = new PoolTable(config.getConfig().getTableConfig(), true);
+        }
+
+        List<Ball> balls = new ArrayList<>();
+        BallBuilderDirector builder = new BallBuilderDirector();
+        builder.registerDefault();
+
+        for (BallConfig ballConf: ballsConf) {
+            Ball ball = builder.construct(ballConf);
+            if (ball == null) {
+                System.err.println("WARNING: Unknown ball, skipping...");
+            } else {
+                balls.add(ball);
+            }
+        }
+
+        this.table.setupBalls(balls);
+        this.winText.setVisible(false);
+        this.winText.setX(table.getDimX() / 2);
+        this.winText.setY(table.getDimY() / 2);
+    }
+
     /**
      * Get the window dimension in the x-axis
      * @return The x-axis size of the window dimension
@@ -103,6 +145,13 @@ public class Game {
         ObservableList<Node> groupChildren = root.getChildren();
         table.addToGroup(groupChildren);
         groupChildren.add(this.winText);
+    }
+
+    public void removeDrawables(Group root){
+        ObservableList<Node> groupChildren = root.getChildren();
+        table.removeFromGroup(groupChildren);
+        groupChildren.remove(this.winText);
+
     }
 
     /** Reset the game */

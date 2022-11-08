@@ -174,6 +174,16 @@ public class PoolTable implements Drawable {
         }
     }
 
+    public void removeFromGroup(ObservableList<Node> groupChildren) {
+        groupChildren.remove(this.shape);
+        for (Pocket pocket : this.pockets) {
+            pocket.removeFromGroup(groupChildren);
+        }
+        for (Ball ball : this.balls) {
+            ball.removeFromGroup(groupChildren);
+        }
+    }
+
     /**
      * Apply friction to all the balls
      */

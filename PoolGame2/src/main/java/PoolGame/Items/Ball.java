@@ -193,6 +193,10 @@ public class Ball implements Drawable, Movable {
         groupChildren.add(this.shape);
         groupChildren.add(this.mouseDragLine);
     }
+    public void removeFromGroup(ObservableList<Node> groupChildren){
+        groupChildren.remove(this.shape);
+        groupChildren.remove(this.mouseDragLine);
+    }
 
     public void setXVel(double xVel) {
         this.vel[0] = xVel;
