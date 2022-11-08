@@ -2,6 +2,8 @@ package PoolGame;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import PoolGame.Builder.BallBuilderDirector;
 import PoolGame.Builder.PocketBuilderDirector;
@@ -21,6 +23,7 @@ public class Game {
     private PoolTable table;
     private boolean shownWonText = false;
     private final Text winText = new Text(50, 50, "Win and Bye");
+    private int score;
 
     /**
      * Initialise the game with the provided config
@@ -175,4 +178,9 @@ public class Game {
             ball.move();
         }
     }
+
+    public int getScore(){
+        return this.score;
+    }
+
 }

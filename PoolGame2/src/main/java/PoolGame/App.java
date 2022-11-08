@@ -10,6 +10,7 @@ import java.util.List;
 import PoolGame.Items.Pocket;
 import PoolGame.Items.PoolTable;
 import PoolGame.State.*;
+import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import org.json.simple.parser.ParseException;
@@ -22,7 +23,13 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
 import javafx.util.Duration;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import PoolGame.Items.Ball;
 
 /** The JavaFX application */
 public class App extends Application {
@@ -31,6 +38,10 @@ public class App extends Application {
     private String path = "/config.json";
     private Canvas canvas;
     private boolean flag;
+    private Label time;
+    private int second = 0;
+    private int minute = 0;
+    private int pocketed = 0;
 
     private ConfigReader loadConfig(List<String> args) {
         String configPath;
@@ -80,27 +91,43 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
+
         Group root = new Group();
         Scene scene = new Scene(root);
-        
+
         stage.setScene(scene);
         stage.setTitle("PoolGame");
-        stage.show();
         
         ConfigReader config = loadConfig(getParameters().getRaw());
         Game game = new Game(config);
 
         canvas = new Canvas(game.getWindowDimX(), game.getWindowDimY());
+        stage.show();
 
-        this.setKeyEvents(root, scene, game);
+        time = new Label();
+        time.setTextFill(Color.BLACK);
+        time.setTranslateX(game.getWindowDimX() + 25);
+        time.setTranslateY(game.getWindowDimY()/2);
 
-        stage.setWidth(game.getWindowDimX());
+        Label score = new Label();
+        score.setText("Score: " + pocketed);
+        score.setTextFill(Color.BLACK);
+        score.setTranslateX(game.getWindowDimX() + 25);
+        score.setTranslateY((game.getWindowDimY()/2) + 15);
+
+        this.timer(time, score);
+
+        this.setKeyEvents(root, scene, game, stage);
+
+        stage.setWidth(game.getWindowDimX() + 150);
         stage.setHeight(game.getWindowDimY() +
                         Pocket.RADIUS +
                         PoolTable.POCKET_OFFSET +
-                        4); // Magic number to get bottom to align
+                        12); // Magic number to get bottom to align
 
         root.getChildren().add(canvas);
+        root.getChildren().add(time);
+        root.getChildren().add(score);
         // GraphicsContext gc = canvas.getGraphicsContext2D();
         game.addDrawables(root);
         
@@ -109,46 +136,43 @@ public class App extends Application {
         KeyFrame frame = new KeyFrame(Duration.seconds(FRAMETIME),
         (actionEvent) -> {
                 game.tick();
+
             });
 
         timeline.getKeyFrames().add(frame);
         timeline.play();
     }
 
-    public void setKeyEvents(Group root, Scene scene, Game game){
+    public void setKeyEvents(Group root, Scene scene, Game game, Stage stage){
         scene.setOnKeyPressed(event -> {
             ConfigReader newConf;
 
             switch (event.getCode()){
                 case Q:
-                    System.out.println("Q pressed");
                     DifficultyState easy = new EasyState();
-                    this.reset(root, game, easy);
+                    this.reset(root, game, easy, stage);
                     System.out.println("Difficulty: Easy");
                     break;
                 case W:
-                    System.out.println("W pressed");
                     DifficultyState normal = new NormalState();
-                    this.reset(root, game, normal);
+                    this.reset(root, game, normal, stage);
                     System.out.println("Difficulty: Normal");
                     break;
                 case E:
-                    System.out.println("E pressed");
                     DifficultyState hard = new HardState();
-                    this.reset(root, game, hard);
+                    this.reset(root, game, hard, stage);
                     System.out.println("Difficulty: Hard");
                     break;
                 case A:
-                    System.out.println("A pressed");
                     DifficultyState original = new OriginalState();
-                    this.reset(root, game, original);
+                    this.reset(root, game, original, stage);
                     System.out.println("Original Level");
                     break;
             }
         });
     }
 
-    public Canvas reset(Group root, Game game, DifficultyState state){
+    public Canvas reset(Group root, Game game, DifficultyState state, Stage stage){
         DifficultyChanger changer = new DifficultyChanger();
         changer.setState(state);
         path = changer.getState();
@@ -158,7 +182,48 @@ public class App extends Application {
         game.reload(newConf);
         canvas = new Canvas(game.getWindowDimX(), game.getWindowDimY());
         game.addDrawables(root);
+        stage.setWidth(game.getWindowDimX() + 150);
+        stage.setHeight(game.getWindowDimY() +
+                Pocket.RADIUS +
+                PoolTable.POCKET_OFFSET +
+                12);
+        second = 0;
+        minute = 0;
+        time.setText("Timer: 00:00");
         return canvas;
+    }
+
+    void timer(Label label, Label score){
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (second < 59){
+                    if (minute < 9){
+                        Platform.runLater(() -> label.setText("Timer: 0" + minute + ":0" + second));
+                        second++;
+                    }
+                    else {
+                        Platform.runLater(() -> label.setText("Timer: " + minute + ":0" + second));
+                        second++;
+                    }
+                }
+                else {
+                    if (minute <= 9){
+                        minute++;
+                        second = 0;
+                        Platform.runLater(() -> label.setText("Timer: 0" + minute + ":0" + second));
+                    }
+                    else {
+                        minute++;
+                        second = 0;
+                        Platform.runLater(() -> label.setText("Timer: " + minute + ":0" + second));
+                    }
+                }
+            }
+        };
+
+        timer.scheduleAtFixedRate(timerTask, 0, 1000);
     }
 
     /**
