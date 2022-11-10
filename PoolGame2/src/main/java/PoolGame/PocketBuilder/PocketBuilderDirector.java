@@ -1,4 +1,4 @@
-package PoolGame.Builder;
+package PoolGame.PocketBuilder;
 
 import PoolGame.Items.Pocket;
 import PoolGame.Config.PocketConfig;

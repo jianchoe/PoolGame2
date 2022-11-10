@@ -1,8 +1,9 @@
-package PoolGame.Builder;
+package PoolGame.PocketBuilder;
 
 import PoolGame.Items.Pocket;
+import PoolGame.PocketBuilder.PocketBuilder;
 
-public class PocketBuilderGeneral implements  PocketBuilder{
+public class PocketBuilderGeneral implements PocketBuilder {
 
     private Pocket pocket;
 

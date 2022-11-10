@@ -2,11 +2,9 @@ package PoolGame;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import PoolGame.Builder.BallBuilderDirector;
-import PoolGame.Builder.PocketBuilderDirector;
+import PoolGame.PocketBuilder.PocketBuilderDirector;
 import PoolGame.Config.BallConfig;
 import PoolGame.Config.PocketConfig;
 import PoolGame.Items.Ball;
@@ -18,7 +16,6 @@ import PoolGame.Momento.Originator;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 
 /** The game class that runs the game */

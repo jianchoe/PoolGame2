@@ -20,15 +20,36 @@ with the pocket's rectangular bound.
 
 * Generate documentation:`gradle javadoc`
 
-New/Editied Files:
-- BallBuilders for extra colours
-  - black, brown, green, orange, purple, yellow
-- BallBuilderDirector
-  - Added extra balls into the register
-- PocketBuilder
-- PocketBuilderDirector
-- PocketsConfig
-- PocketConfig
-- PocketBuilderGeneral
-- ConfigReader
-- GameConfig
+* Features implemented:
+  * Configurable Pockets (Extended on Config Factory and used Builder pattern)
+  * More Coloured Balls (Extended on Ball Builder and Pocket Strategy)
+  * Difficulty Level (State pattern)
+  * Time
+  * Score (Strategy pattern)
+  * Cheat (Strategy Pattern)
+  * Undo (Memento pattern (Not currently working))
+
+* Patterns Used -> All classes/package involved:
+  * Builder -> (PocketBuilder package)
+  * State -> (State package)
+  * Strategy -> (ScoringStrategy & CheatStrategy packages)
+  * Memento -> (Memento package)
+
+* Difficulty Selection: Starts with EASY Difficulty
+  * Press **Q** for **Easy** difficulty (config_easy.json)
+  * Press **W** for **Normal** Difficulty (config_normal.json)
+  * Press **E** for **Hard** Difficulty (config_hard.json)
+  * Press **A** for **Original** Level (config.json)
+
+* Cheat Selection:
+  * Press **Z** to cheat **RED** balls
+  * Press **X** to cheat **YELLOW** balls
+  * Press **C** to cheat **GREEN** balls
+  * Press **V** to cheat **BROWN** balls
+  * Press **B** to cheat **BLUE** balls
+  * Press **N** to cheat **PURPLE** balls
+  * Press **M** to cheat **BLACK** balls
+  * Press **K** to cheat **ORANGE** balls
+
+* Undo:
+  * Press **R** to **UNDO** (Currently not working)

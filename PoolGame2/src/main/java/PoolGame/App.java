@@ -7,6 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import PoolGame.CheatStrategy.CheatContext;
+import PoolGame.CheatStrategy.CheatStrategy;
+import PoolGame.CheatStrategy.*;
 import PoolGame.Items.Pocket;
 import PoolGame.Items.PoolTable;
 import PoolGame.Momento.Caretaker;
@@ -35,7 +38,7 @@ import PoolGame.Items.Ball;
 public class App extends Application {
 
     private final double FRAMETIME = 1.0 / 60.0;
-    private String path = "/config.json";
+    private String path = "/config_easy.json";
     private Canvas canvas;
     private boolean flag;
     private Label time;
@@ -149,6 +152,8 @@ public class App extends Application {
     public void setKeyEvents(Group root, Scene scene, Game game, Stage stage){
         scene.setOnKeyPressed(event -> {
 
+            CheatContext cheatContext = new CheatContext();
+
             switch (event.getCode()){
                 case Q:
                     DifficultyState easy = new EasyState();
@@ -174,6 +179,38 @@ public class App extends Application {
                     this.saveSnapshot(game);
                     originalState.recoverState(storage.getMemento());
                     this.undo(game, root, stage);
+                case Z:
+                    CheatStrategy red = new redCheat();
+                    cheatContext.setCheatStrategy(red);
+                    cheatContext.executeCheatStrategy(game.getPoolTable());
+                case X:
+                    CheatStrategy yellow = new yellowCheat();
+                    cheatContext.setCheatStrategy(yellow);
+                    cheatContext.executeCheatStrategy(game.getPoolTable());
+                case C:
+                    CheatStrategy green = new greenCheat();
+                    cheatContext.setCheatStrategy(green);
+                    cheatContext.executeCheatStrategy(game.getPoolTable());
+                case V:
+                    CheatStrategy brown = new brownCheat();
+                    cheatContext.setCheatStrategy(brown);
+                    cheatContext.executeCheatStrategy(game.getPoolTable());
+                case B:
+                    CheatStrategy blue = new blueCheat();
+                    cheatContext.setCheatStrategy(blue);
+                    cheatContext.executeCheatStrategy(game.getPoolTable());
+                case N:
+                    CheatStrategy purple = new purpleCheat();
+                    cheatContext.setCheatStrategy(purple);
+                    cheatContext.executeCheatStrategy(game.getPoolTable());
+                case M:
+                    CheatStrategy black = new blackCheat();
+                    cheatContext.setCheatStrategy(black);
+                    cheatContext.executeCheatStrategy(game.getPoolTable());
+                case K:
+                    CheatStrategy orange = new orangeCheat();
+                    cheatContext.setCheatStrategy(orange);
+                    cheatContext.executeCheatStrategy(game.getPoolTable());
             }
         });
     }
