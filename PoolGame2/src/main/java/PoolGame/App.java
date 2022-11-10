@@ -9,6 +9,9 @@ import java.util.List;
 
 import PoolGame.Items.Pocket;
 import PoolGame.Items.PoolTable;
+import PoolGame.Momento.Caretaker;
+import PoolGame.Momento.Memento;
+import PoolGame.Momento.Originator;
 import PoolGame.State.*;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
@@ -37,6 +40,10 @@ public class App extends Application {
     private boolean flag;
     private Label time;
     private Label score;
+    private Originator originalState;
+    private Memento snapshot;
+    private Caretaker storage;
+
     private ConfigReader loadConfig(List<String> args) {
         String configPath;
         boolean isResourcesDir = false;
@@ -163,8 +170,34 @@ public class App extends Application {
                     this.reset(root, game, original, stage);
                     System.out.println("Original Level");
                     break;
+                case R:
+                    this.saveSnapshot(game);
+                    originalState.recoverState(storage.getMemento());
+                    this.undo(game, root, stage);
             }
         });
+    }
+
+    public void saveSnapshot(Game game){
+        originalState = new Originator();
+        storage = new Caretaker();
+        snapshot = originalState.saveState(game.getPoolTable());
+        storage.setMemento(snapshot);
+    }
+    public Originator getOriginalState(){
+        return this.originalState;
+    }
+    public Memento getSnapshot(){
+        return snapshot;
+    }
+    public Canvas undo(Game game, Group root, Stage stage){
+        originalState.recoverState(snapshot);
+        System.out.println(snapshot.getSecond());
+        game.getPoolTable().setSecond(snapshot.getSecond());
+        game.getPoolTable().setMinute(snapshot.getMinute());
+        time.setText("Timer: " + snapshot.getMinute() + ":" + snapshot.getSecond());
+        score.setText("Score: " + snapshot.getScore());
+        return canvas;
     }
 
     public Canvas reset(Group root, Game game, DifficultyState state, Stage stage){

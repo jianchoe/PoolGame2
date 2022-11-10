@@ -12,6 +12,9 @@ import PoolGame.Config.PocketConfig;
 import PoolGame.Items.Ball;
 import PoolGame.Items.Pocket;
 import PoolGame.Items.PoolTable;
+import PoolGame.Momento.Caretaker;
+import PoolGame.Momento.Memento;
+import PoolGame.Momento.Originator;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -23,6 +26,9 @@ public class Game {
     private PoolTable table;
     private boolean shownWonText = false;
     private final Text winText = new Text(50, 50, "Win and Bye");
+    private Originator originalState;
+    private Memento snapshot;
+    private boolean isSaved;
 
     /**
      * Initialise the game with the provided config
@@ -68,6 +74,7 @@ public class Game {
             }
         }
 
+        this.setIsSaved(false);
         this.table.setupBalls(balls);
         this.winText.setVisible(false);
         this.winText.setX(table.getDimX() / 2);
@@ -175,7 +182,31 @@ public class Game {
         this.table.applyFrictionToBalls();
         for (Ball ball : this.table.getBalls()) {
             ball.move();
+//            if (ball.getBallType() == Ball.BallType.CUEBALL){
+//                if (ball.hasStopped()){
+//                    if (isSaved == false){
+//                        this.saveSnapshot();
+//                        this.setIsSaved(true);
+//                    }
+//                }
+//            }
         }
+
+    }
+    public void saveSnapshot(){
+        originalState = new Originator();
+        Caretaker storage = new Caretaker();
+        snapshot = originalState.saveState(this.getPoolTable());
+        storage.setMemento(snapshot);
+    }
+    public Originator getOriginalState(){
+        return this.originalState;
+    }
+    public Memento getSnapshot(){
+        return snapshot;
+    }
+    public void setIsSaved(boolean val){
+        this.isSaved = val;
     }
 
 }
