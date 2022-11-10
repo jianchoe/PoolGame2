@@ -26,9 +26,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import PoolGame.Items.Ball;
 
 /** The JavaFX application */
@@ -39,10 +36,9 @@ public class App extends Application {
     private Canvas canvas;
     private boolean flag;
     private Label time;
+    private Label score;
     private int second = 0;
     private int minute = 0;
-    private int pocketed = 0;
-
     private ConfigReader loadConfig(List<String> args) {
         String configPath;
         boolean isResourcesDir = false;
@@ -105,17 +101,16 @@ public class App extends Application {
         stage.show();
 
         time = new Label();
+        time.setText("Timer: 00:00");
         time.setTextFill(Color.BLACK);
         time.setTranslateX(game.getWindowDimX() + 25);
         time.setTranslateY(game.getWindowDimY()/2);
 
-        Label score = new Label();
-        score.setText("Score: " + pocketed);
+        score = new Label();
+        score.setText("Score: " + game.getPoolTable().getScore());
         score.setTextFill(Color.BLACK);
         score.setTranslateX(game.getWindowDimX() + 25);
         score.setTranslateY((game.getWindowDimY()/2) + 15);
-
-        this.timer(time, score);
 
         this.setKeyEvents(root, scene, game, stage);
 
@@ -141,11 +136,13 @@ public class App extends Application {
 
         timeline.getKeyFrames().add(frame);
         timeline.play();
+
+        this.timer(time, frame);
+        this.score(game, frame);
     }
 
     public void setKeyEvents(Group root, Scene scene, Game game, Stage stage){
         scene.setOnKeyPressed(event -> {
-            ConfigReader newConf;
 
             switch (event.getCode()){
                 case Q:
@@ -190,40 +187,70 @@ public class App extends Application {
         second = 0;
         minute = 0;
         time.setText("Timer: 00:00");
+        game.getPoolTable().setScore(0);
+        score.setText("Score: 0");
         return canvas;
     }
 
-    void timer(Label label, Label score){
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                if (second < 59){
-                    if (minute < 9){
-                        Platform.runLater(() -> label.setText("Timer: 0" + minute + ":0" + second));
-                        second++;
+    void timer(Label label, KeyFrame frame){
+
+        Timeline timelineTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            if (second <= 58){
+                if (second <= 8){
+                    if (minute <= 8){
+                        label.setText("Timer: 0" + minute + ":0" + ++second);
                     }
                     else {
-                        Platform.runLater(() -> label.setText("Timer: " + minute + ":0" + second));
-                        second++;
+                        label.setText("Timer: " + minute + ":0" + ++second);
                     }
                 }
-                else {
-                    if (minute <= 9){
-                        minute++;
-                        second = 0;
-                        Platform.runLater(() -> label.setText("Timer: 0" + minute + ":0" + second));
+                else{
+                    if (minute <= 8){
+                        label.setText("Timer: 0" + minute + ":" + ++second);
                     }
                     else {
-                        minute++;
-                        second = 0;
-                        Platform.runLater(() -> label.setText("Timer: " + minute + ":0" + second));
+                        label.setText("Timer: " + minute + ":" + ++second);
                     }
                 }
             }
-        };
+            else {
+                if (second <= 8){
+                    if (minute <= 8){
+                        second = 0;
+                        label.setText("Timer: 0" + ++minute + ":0" + second);
+                    }
+                    else {
+                        second = 0;
+                        label.setText("Timer: " + ++minute + ":0" + second);
+                    }
+                }
+                else{
+                    if (minute <= 8){
+                        second = 0;
+                        label.setText("Timer: 0" + ++minute + ":0" + second);
+                    }
+                    else {
+                        second = 0;
+                        label.setText("Timer: " + ++minute + ":" + second);
+                    }
+                }
+            }
+        }));
+        timelineTimer.setCycleCount(timelineTimer.INDEFINITE);
+        timelineTimer.getKeyFrames().add(frame);
+        timelineTimer.play();
+    }
 
-        timer.scheduleAtFixedRate(timerTask, 0, 1000);
+    public void score(Game game, KeyFrame frame){
+
+        Timeline timelineScore = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+
+            score.setText("Score: " + game.getPoolTable().getScore());
+        }));
+
+        timelineScore.setCycleCount(Timeline.INDEFINITE);
+        timelineScore.getKeyFrames().add(frame);
+        timelineScore.play();
     }
 
     /**

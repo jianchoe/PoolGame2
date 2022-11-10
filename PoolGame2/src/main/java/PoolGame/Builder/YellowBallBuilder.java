@@ -29,7 +29,7 @@ public class YellowBallBuilder implements BallBuilder {
 
     public void reset() {
         this.ball = new Ball();
-        this.ball.setColour("yellow");
+        this.ball.setColour("gold");
         if (ballType != null) {
             this.ball.setBallType(this.ballType);
         }

@@ -6,6 +6,7 @@ import PoolGame.Drawable;
 import PoolGame.Game;
 import PoolGame.Config.TableConfig;
 import PoolGame.Items.Ball.BallType;
+import PoolGame.Strategy.*;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -24,6 +25,8 @@ public class PoolTable implements Drawable {
     private List<Ball> balls;
     private List<Pocket> pockets;
     private boolean flag;
+    private int score = 0;
+    private Map<String, ScoringStrategy> scoreRegister;
 
     /**
      * Offset of pockets on the table.
@@ -63,6 +66,8 @@ public class PoolTable implements Drawable {
         this.shape = new Rectangle(this.dim[0], this.dim[1], this.colour);
         this.balls = new LinkedList<>();
         this.pockets = new ArrayList<>();
+        scoreRegister = new HashMap<>();
+        this.scoringSetup();
 
         if (this.flag == true){
             this.pockets = new ArrayList<>();
@@ -207,10 +212,68 @@ public class PoolTable implements Drawable {
                 Point2D ballCenter = new Point2D(ball.getXPos(), ball.getYPos());
                 if (pocket.isInPocket(ballCenter)) {
                     ball.fallIntoPocket(game);
+                    this.score(ball);
                 }
             }
         }
     }
+
+    public void score(Ball ball){
+        ScoringContext context = new ScoringContext();
+
+        if (ball.getColour() == Color.RED){
+            String key = "red";
+            context.setScoringStrategy(scoreRegister.get(key));
+            context.executeScoringStrategy(this);
+        }
+        if (ball.getColour() == Color.GOLD){
+            String key = "yellow";
+            context.setScoringStrategy(scoreRegister.get(key));
+            context.executeScoringStrategy(this);
+        }
+        if (ball.getColour() == Color.SEAGREEN){
+            String key = "green";
+            context.setScoringStrategy(scoreRegister.get(key));
+            context.executeScoringStrategy(this);
+        }
+        if (ball.getColour() == Color.BROWN){
+            String key = "brown";
+            context.setScoringStrategy(scoreRegister.get(key));
+            context.executeScoringStrategy(this);
+        }
+        if (ball.getColour() == Color.BLUE){
+            String key = "blue";
+            context.setScoringStrategy(scoreRegister.get(key));
+            context.executeScoringStrategy(this);
+        }
+        if (ball.getColour() == Color.PURPLE){
+            String key = "purple";
+            context.setScoringStrategy(scoreRegister.get(key));
+            context.executeScoringStrategy(this);
+        }
+        if (ball.getColour() == Color.BLACK){
+            String key = "black";
+            context.setScoringStrategy(scoreRegister.get(key));
+            context.executeScoringStrategy(this);
+        }
+        if (ball.getColour() == Color.ORANGE){
+            String key = "orange";
+            context.setScoringStrategy(scoreRegister.get(key));
+            context.executeScoringStrategy(this);
+        }
+    }
+
+    public void scoringSetup(){
+        scoreRegister.put("red", new redScoring());
+        scoreRegister.put("yellow", new yellowScoring());
+        scoreRegister.put("green", new greenScoring());
+        scoreRegister.put("brown", new brownScoring());
+        scoreRegister.put("blue", new blueScoring());
+        scoreRegister.put("purple", new purpleScoring());
+        scoreRegister.put("black", new blackScoring());
+        scoreRegister.put("orange", new orangeScoring());
+    }
+
 
     /**
      * Handle the collision between the balls and table and between balls.
@@ -279,6 +342,12 @@ public class PoolTable implements Drawable {
         for (Ball ball : this.balls) {
             ball.reset();
         }
+    }
+    public int getScore(){
+        return this.score;
+    }
+    public void setScore(int num){
+        this.score = num;
     }
 
 }

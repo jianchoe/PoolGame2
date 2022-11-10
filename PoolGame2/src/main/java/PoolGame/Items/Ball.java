@@ -214,6 +214,10 @@ public class Ball implements Drawable, Movable {
         this.shape.setFill(this.colour);
     }
 
+    public Color getColour(){
+        return this.colour;
+    }
+
     /**
      * Set the initial x coordinate of the ball. The ball will spawn at this 
      * x coordinate on reset.
