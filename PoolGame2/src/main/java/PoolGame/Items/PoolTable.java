@@ -6,12 +6,11 @@ import PoolGame.Drawable;
 import PoolGame.Game;
 import PoolGame.Config.TableConfig;
 import PoolGame.Items.Ball.BallType;
-import PoolGame.Strategy.*;
+import PoolGame.ScoringStrategy.*;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -27,6 +26,8 @@ public class PoolTable implements Drawable {
     private boolean flag;
     private int score = 0;
     private Map<String, ScoringStrategy> scoreRegister;
+    private int second = 0;
+    private int minute = 0;
 
     /**
      * Offset of pockets on the table.
@@ -212,7 +213,6 @@ public class PoolTable implements Drawable {
                 Point2D ballCenter = new Point2D(ball.getXPos(), ball.getYPos());
                 if (pocket.isInPocket(ballCenter)) {
                     ball.fallIntoPocket(game);
-                    this.score(ball);
                 }
             }
         }
@@ -273,7 +273,6 @@ public class PoolTable implements Drawable {
         scoreRegister.put("black", new blackScoring());
         scoreRegister.put("orange", new orangeScoring());
     }
-
 
     /**
      * Handle the collision between the balls and table and between balls.
@@ -348,6 +347,23 @@ public class PoolTable implements Drawable {
     }
     public void setScore(int num){
         this.score = num;
+    }
+
+    public void setSecond(int second){
+        this.second = second;
+    }
+    public void setMinute(int minute){
+        this.minute = minute;
+    }
+    public int getSecond(){
+        return this.second;
+    }
+    public int getMinute(){
+        return this.minute;
+    }
+    public void resetTimer(){
+        this.setSecond(0);
+        this.setMinute(0);
     }
 
 }

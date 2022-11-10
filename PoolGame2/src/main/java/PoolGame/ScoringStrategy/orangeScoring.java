@@ -1,13 +1,12 @@
-package PoolGame.Strategy;
+package PoolGame.ScoringStrategy;
 
 import PoolGame.Items.PoolTable;
-import javafx.scene.paint.Color;
 
-public class redScoring implements ScoringStrategy {
+public class orangeScoring implements ScoringStrategy {
 
     public void updateScore(PoolTable table){
         int score = table.getScore();
-        score++;
+        score += 8;
         table.setScore(score);
     }
 }

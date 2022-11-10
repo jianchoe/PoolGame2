@@ -2,6 +2,7 @@ package PoolGame.Strategy;
 
 import PoolGame.Game;
 import PoolGame.Items.Ball;
+import PoolGame.Strategy.BallPocketStrategy;
 
 /** Hide the ball once it falls into the pocket twice or spawn it back to its
  * original location. If there is a ball on the original location, hide the ball.
@@ -14,11 +15,13 @@ public class PocketTwice implements BallPocketStrategy {
         ball.incrementFallCounter();
         if (ball.getFallCounter() >= FALL_COUNTER_THRESHOLD) {
             ball.disable();
+            game.getPoolTable().score(ball);
         } else {
             ball.resetPosition();
             for (Ball ballB: game.getPoolTable().getBalls()) {
                 if (ball.isColliding(ballB)) {
                     ball.disable();
+                    game.getPoolTable().score(ball);
                 }
             }
         }

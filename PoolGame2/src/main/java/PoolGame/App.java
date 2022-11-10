@@ -37,8 +37,6 @@ public class App extends Application {
     private boolean flag;
     private Label time;
     private Label score;
-    private int second = 0;
-    private int minute = 0;
     private ConfigReader loadConfig(List<String> args) {
         String configPath;
         boolean isResourcesDir = false;
@@ -137,8 +135,8 @@ public class App extends Application {
         timeline.getKeyFrames().add(frame);
         timeline.play();
 
-        this.timer(time, frame);
-        this.score(game, frame);
+        this.timer(time, frame, game);
+        this.showScore(game, frame);
     }
 
     public void setKeyEvents(Group root, Scene scene, Game game, Stage stage){
@@ -184,17 +182,19 @@ public class App extends Application {
                 Pocket.RADIUS +
                 PoolTable.POCKET_OFFSET +
                 12);
-        second = 0;
-        minute = 0;
+        game.getPoolTable().resetTimer();
         time.setText("Timer: 00:00");
         game.getPoolTable().setScore(0);
         score.setText("Score: 0");
         return canvas;
     }
 
-    void timer(Label label, KeyFrame frame){
+    void timer(Label label, KeyFrame frame, Game game){
 
         Timeline timelineTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            int second = game.getPoolTable().getSecond();
+            int minute = game.getPoolTable().getMinute();
+
             if (second <= 58){
                 if (second <= 8){
                     if (minute <= 8){
@@ -211,6 +211,9 @@ public class App extends Application {
                     else {
                         label.setText("Timer: " + minute + ":" + ++second);
                     }
+                }
+                if (!game.getPoolTable().hasWon()){
+                    game.getPoolTable().setSecond(second);
                 }
             }
             else {
@@ -234,6 +237,10 @@ public class App extends Application {
                         label.setText("Timer: " + ++minute + ":" + second);
                     }
                 }
+                if (!game.getPoolTable().hasWon()){
+                    game.getPoolTable().setMinute(minute);
+                    game.getPoolTable().setSecond(0);
+                }
             }
         }));
         timelineTimer.setCycleCount(timelineTimer.INDEFINITE);
@@ -241,7 +248,7 @@ public class App extends Application {
         timelineTimer.play();
     }
 
-    public void score(Game game, KeyFrame frame){
+    public void showScore(Game game, KeyFrame frame){
 
         Timeline timelineScore = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
 

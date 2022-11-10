@@ -1,4 +1,4 @@
-package PoolGame.Strategy;
+package PoolGame.ScoringStrategy;
 
 import PoolGame.Items.PoolTable;
 

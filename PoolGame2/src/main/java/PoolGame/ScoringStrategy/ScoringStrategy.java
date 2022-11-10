@@ -1,7 +1,6 @@
-package PoolGame.Strategy;
+package PoolGame.ScoringStrategy;
 
 import PoolGame.Items.PoolTable;
-import javafx.scene.paint.Color;
 
 public interface ScoringStrategy {
 

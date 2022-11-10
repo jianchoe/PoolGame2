@@ -1,12 +1,12 @@
-package PoolGame.Strategy;
+package PoolGame.ScoringStrategy;
 
 import PoolGame.Items.PoolTable;
 
-public class blackScoring implements ScoringStrategy {
+public class redScoring implements ScoringStrategy {
 
     public void updateScore(PoolTable table){
         int score = table.getScore();
-        score += 7;
+        score++;
         table.setScore(score);
     }
 }
