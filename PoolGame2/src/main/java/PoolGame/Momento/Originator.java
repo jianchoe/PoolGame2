@@ -12,9 +12,18 @@ public class Originator {
     private int score;
     private List<Ball> balls;
 
+    /**
+     * @param table
+     * @return the saved snapshot of the current game state
+     */
     public Memento saveState(PoolTable table){
         return new Memento(table);
     }
+
+    /**
+     * Retrieves the previously saved snapshot of the game state
+     * @param memento
+     */
     public void recoverState(Memento memento){
         this.second = memento.getSecond();
         this.minute = memento.getMinute();

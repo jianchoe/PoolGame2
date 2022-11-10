@@ -51,7 +51,10 @@ public class Pocket implements Drawable {
     public Node getNode() {
         return this.shape;
     }
-
+    /**
+     * Add the pocket to the JavaFX group, so they can be drawn.
+     * @param groupChildren The list of `Node` obtained from the JavaFX Group.
+     */
     public void addToGroup(ObservableList<Node> groupChildren) {
         groupChildren.add(this.shape);
     }
@@ -62,7 +65,10 @@ public class Pocket implements Drawable {
         }
         groupChildren.add(this.shape);
     }
-
+    /**
+     * Remove the ball to the JavaFX group
+     * @param groupChildren The list of `Node` obtained from the JavaFX Group.
+     */
     public void removeFromGroup(ObservableList<Node> groupChildren){
         groupChildren.remove(this.shape);
     }

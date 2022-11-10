@@ -1,0 +1,11 @@
+PoolGame
+PoolGame.Builder
+PoolGame.CheatStrategy
+PoolGame.Config
+PoolGame.Factory
+PoolGame.Items
+PoolGame.Momento
+PoolGame.PocketBuilder
+PoolGame.ScoringStrategy
+PoolGame.State
+PoolGame.Strategy

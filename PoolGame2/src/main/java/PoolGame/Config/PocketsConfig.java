@@ -7,6 +7,10 @@ public class PocketsConfig implements Configurable{
 
     private List<PocketConfig> pocket;
 
+    /**
+     * Initialise the instance with the provided JSONArray of pocket
+     * @param obj A JSONArray containing all the pocket configuration
+     */
     public PocketsConfig(Object obj){
         this.parseJSON(obj);
     }

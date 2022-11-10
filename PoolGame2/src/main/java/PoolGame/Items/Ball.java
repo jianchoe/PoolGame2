@@ -42,6 +42,7 @@ public class Ball implements Drawable, Movable {
     private BallPocketStrategy pocketAction;
     private boolean disabled = false;
     private int fallCounter = 0;
+    private Line cueStick;
 
     /**
      * Initialise the ball based on the provided value
@@ -69,6 +70,10 @@ public class Ball implements Drawable, Movable {
         this.setMass(mass);
         this.setBallType(type);
         this.setPocketAction(pocketAction);
+        this.cueStick = new Line();
+        this.cueStick.setStroke(Color.BURLYWOOD);
+        this.cueStick.setStrokeWidth(3);
+        this.cueStick.setVisible(false);
     }
 
     /** 
@@ -79,6 +84,10 @@ public class Ball implements Drawable, Movable {
         this.shape = new Circle(this.originalPos[0], this.originalPos[1], RADIUS);
         this.mouseDragLine = new Line();
         this.mouseDragLine.setVisible(false);
+        this.cueStick = new Line();
+        this.cueStick.setStroke(Color.BURLYWOOD);
+        this.cueStick.setStrokeWidth(3);
+        this.cueStick.setVisible(false);
     }
 
     /**
@@ -192,10 +201,16 @@ public class Ball implements Drawable, Movable {
     public void addToGroup(ObservableList<Node> groupChildren) {
         groupChildren.add(this.shape);
         groupChildren.add(this.mouseDragLine);
+        groupChildren.add(this.cueStick);
     }
+    /**
+     * Remove the ball to the JavaFX group
+     * @param groupChildren The list of `Node` obtained from the JavaFX Group.
+     */
     public void removeFromGroup(ObservableList<Node> groupChildren){
         groupChildren.remove(this.shape);
         groupChildren.remove(this.mouseDragLine);
+        groupChildren.remove(this.cueStick);
     }
 
     public void setXVel(double xVel) {
@@ -337,11 +352,17 @@ public class Ball implements Drawable, Movable {
         this.shape.setOnMouseDragged(
             (actionEvent) -> {
                 if (this.hasStopped()) {
-                    this.mouseDragLine.setVisible(true);
+                    this.mouseDragLine.setVisible(false);
                     this.mouseDragLine.setStartX(this.shape.getCenterX());
                     this.mouseDragLine.setStartY(this.shape.getCenterY());
                     this.mouseDragLine.setEndX(actionEvent.getSceneX());
                     this.mouseDragLine.setEndY(actionEvent.getSceneY());
+
+                    cueStick.setVisible(true);
+                    cueStick.setStartX(actionEvent.getSceneX());
+                    cueStick.setStartY(actionEvent.getSceneY());
+                    cueStick.setEndX(actionEvent.getSceneX() + 3 * (actionEvent.getSceneX() - shape.getCenterX()));
+                    cueStick.setEndY(actionEvent.getSceneY() + 3 * (actionEvent.getSceneY() - shape.getCenterY()));
                 }
             }
         );
@@ -353,6 +374,7 @@ public class Ball implements Drawable, Movable {
                     // System.out.printf("%f, %f\n", vec.getX(), vec.getY());
                     this.setXVel(vec.getX());
                     this.setYVel(vec.getY());
+                    this.cueStick.setVisible(false);
                 }
             }
         );

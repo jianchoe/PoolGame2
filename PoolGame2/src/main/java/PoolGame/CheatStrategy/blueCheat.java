@@ -10,6 +10,7 @@ public class blueCheat implements CheatStrategy{
         int tempScore = table.getScore();
         for (Ball ball : table.getBalls()){
             if (ball.getColour() == Color.BLUE){
+                System.out.println("blue");
                 ball.disable();
                 tempScore += 5;
             }

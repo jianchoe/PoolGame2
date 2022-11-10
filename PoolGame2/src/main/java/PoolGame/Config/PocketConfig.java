@@ -12,6 +12,10 @@ public class PocketConfig implements Configurable{
 
     private double radius;
 
+    /**
+     * Initialise the instance with the provided JSONObject
+     * @param obj A JSONObject containing the pocket configuration
+     */
     public PocketConfig(Object obj){
         this.parseJSON(obj);
     }

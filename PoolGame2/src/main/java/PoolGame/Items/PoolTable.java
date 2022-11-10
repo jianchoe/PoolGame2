@@ -161,7 +161,7 @@ public class PoolTable implements Drawable {
     }
 
     /**
-     * Add the table and the balls to the JavaFX group so they can be drawn.
+     * Add the table, the balls and pockets to the JavaFX group so they can be drawn.
      * @param groupChildren The list of `Node` obtained from the JavaFX Group.
      */
     @Override
@@ -179,7 +179,10 @@ public class PoolTable implements Drawable {
             ball.addToGroup(groupChildren);
         }
     }
-
+    /**
+     * Remove the table, the balls and pockets from the JavaFX group so they can be drawn.
+     * @param groupChildren The list of `Node` obtained from the JavaFX Group.
+     */
     public void removeFromGroup(ObservableList<Node> groupChildren) {
         groupChildren.remove(this.shape);
         for (Pocket pocket : this.pockets) {
@@ -218,6 +221,10 @@ public class PoolTable implements Drawable {
         }
     }
 
+    /**
+     * Performs the respective scoring strategies of a ball
+     * @param ball pocketed ball
+     */
     public void score(Ball ball){
         ScoringContext context = new ScoringContext();
 
@@ -263,6 +270,10 @@ public class PoolTable implements Drawable {
         }
     }
 
+    /**
+     * Puts the respective scoring strategies for different coloured balls
+     * into a register
+     */
     public void scoringSetup(){
         scoreRegister.put("red", new redScoring());
         scoreRegister.put("yellow", new yellowScoring());

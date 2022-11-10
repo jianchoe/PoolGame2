@@ -53,3 +53,5 @@ with the pocket's rectangular bound.
 
 * Undo:
   * Press **R** to **UNDO** (Currently not working)
+
+JavaDoc can be found in build/docs/javadoc/index.html

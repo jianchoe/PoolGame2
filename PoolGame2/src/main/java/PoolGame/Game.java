@@ -78,6 +78,10 @@ public class Game {
         this.winText.setY(table.getDimY() / 2);
     }
 
+    /**
+     * Sets up the game again for a change in difficulty state
+     * @param config
+     */
     public void reload(ConfigReader config) {
         List<BallConfig> ballsConf = config.getConfig().getBallsConfig().getBallConfigs();
 

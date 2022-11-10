@@ -149,6 +149,13 @@ public class App extends Application {
         this.showScore(game, frame);
     }
 
+    /**
+     * Trigger events when certain keys are pressed
+     * @param root
+     * @param scene
+     * @param game
+     * @param stage
+     */
     public void setKeyEvents(Group root, Scene scene, Game game, Stage stage){
         scene.setOnKeyPressed(event -> {
 
@@ -178,43 +185,55 @@ public class App extends Application {
                 case R:
                     this.saveSnapshot(game);
                     originalState.recoverState(storage.getMemento());
-                    this.undo(game, root, stage);
+                    break;
                 case Z:
                     CheatStrategy red = new redCheat();
                     cheatContext.setCheatStrategy(red);
                     cheatContext.executeCheatStrategy(game.getPoolTable());
+                    break;
                 case X:
                     CheatStrategy yellow = new yellowCheat();
                     cheatContext.setCheatStrategy(yellow);
                     cheatContext.executeCheatStrategy(game.getPoolTable());
+                    break;
                 case C:
                     CheatStrategy green = new greenCheat();
                     cheatContext.setCheatStrategy(green);
                     cheatContext.executeCheatStrategy(game.getPoolTable());
+                    break;
                 case V:
                     CheatStrategy brown = new brownCheat();
                     cheatContext.setCheatStrategy(brown);
                     cheatContext.executeCheatStrategy(game.getPoolTable());
+                    break;
                 case B:
                     CheatStrategy blue = new blueCheat();
                     cheatContext.setCheatStrategy(blue);
                     cheatContext.executeCheatStrategy(game.getPoolTable());
+                    break;
                 case N:
                     CheatStrategy purple = new purpleCheat();
                     cheatContext.setCheatStrategy(purple);
                     cheatContext.executeCheatStrategy(game.getPoolTable());
+                    break;
                 case M:
                     CheatStrategy black = new blackCheat();
                     cheatContext.setCheatStrategy(black);
                     cheatContext.executeCheatStrategy(game.getPoolTable());
+                    break;
                 case K:
                     CheatStrategy orange = new orangeCheat();
                     cheatContext.setCheatStrategy(orange);
                     cheatContext.executeCheatStrategy(game.getPoolTable());
+                    break;
             }
         });
     }
 
+    /**
+     * Save the current state of the game
+     * @param game
+     */
     public void saveSnapshot(Game game){
         originalState = new Originator();
         storage = new Caretaker();
@@ -227,6 +246,14 @@ public class App extends Application {
     public Memento getSnapshot(){
         return snapshot;
     }
+
+    /**
+     * Returns the game state to previously saved state
+     * @param game
+     * @param root
+     * @param stage
+     * @return
+     */
     public Canvas undo(Game game, Group root, Stage stage){
         originalState.recoverState(snapshot);
         System.out.println(snapshot.getSecond());
@@ -237,6 +264,14 @@ public class App extends Application {
         return canvas;
     }
 
+    /**
+     * Redraws the canvas to change difficulty state
+     * @param root
+     * @param game
+     * @param state
+     * @param stage
+     * @return
+     */
     public Canvas reset(Group root, Game game, DifficultyState state, Stage stage){
         DifficultyChanger changer = new DifficultyChanger();
         changer.setState(state);
@@ -256,9 +291,16 @@ public class App extends Application {
         time.setText("Timer: 00:00");
         game.getPoolTable().setScore(0);
         score.setText("Score: 0");
+        game.reset();
         return canvas;
     }
 
+    /**
+     * Shows a timer for the game
+     * @param label
+     * @param frame
+     * @param game
+     */
     void timer(Label label, KeyFrame frame, Game game){
 
         Timeline timelineTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
@@ -318,6 +360,11 @@ public class App extends Application {
         timelineTimer.play();
     }
 
+    /**
+     * Shows the score for the game
+     * @param game
+     * @param frame
+     */
     public void showScore(Game game, KeyFrame frame){
 
         Timeline timelineScore = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
